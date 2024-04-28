@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
     Table,
     TableBody,
@@ -31,7 +32,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     });
 
     // TASK : Make first 2 columns (i.e. checkbox and task id) sticky
+    // Add sticky style to first 2 columns
+    const stickyStyle = { position: "sticky", left: 0, zIndex: 1 };
+
     // TASK : Make header columns resizable
+    // Add resizable style to header columns
+    const resizableStyle = { resize: "horizontal" };
 
     return (
         <div className="space-y-4">
@@ -40,18 +46,20 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id} colSpan={header.colSpan}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext(),
-                                                  )}
-                                        </TableHead>
-                                    );
-                                })}
+                                {headerGroup.headers.map((header, index) => (
+                                    <TableHead
+                                        key={header.id}
+                                        colSpan={header.colSpan}
+                                        style={index < 2 ? stickyStyle : resizableStyle}
+                                    >
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext(),
+                                            )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
